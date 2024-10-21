@@ -1,0 +1,3 @@
+CONFIG FOR crontab -e SAME FOR ALL ANSIBLE SERVERS
+
+* * * * * /home/ntomlin42/ansible_playbooks/cronplaybook.sh

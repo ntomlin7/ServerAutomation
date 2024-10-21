@@ -1,0 +1,117 @@
+PLAYBOOK FOR DEV ANSIBLE SERVER (devserversetup.yml) ------------------------------------------------------------------------------
+
+---
+  - name: installapacheandnode
+    hosts: devwebservers
+    tasks:
+      - name: ensure apache is installed
+        apt:
+          name: apache2
+          state: latest
+
+      - name: ensure nodejs is installed
+        apt:
+          name: nodejs
+          state: latest
+
+  - name: installmariadb
+    hosts: devdbservers
+    tasks:
+      - name: ensure mariadb is installed
+        apt:
+          name: mariadb-server
+          state: latest
+
+  - name: cloneRepoOrPullRepo
+    hosts: devwebservers
+    tasks:
+      - name: Copy the shell script to the server
+        copy:
+          src: /home/ntomlin42/ansible_playbooks/cloneorrepo.sh
+          dest: /home/ntomlin42
+          mode: '0755'  # Ensure the script is executable
+
+      - name: Execute the shell script
+        command: bash /home/ntomlin42/cloneorrepo.sh "{{serverselect}}"
+        become: true
+        become_user: ntomlin42
+
+
+PLAYBOOK FOR TEST ANSIBLE SERVER (testserversetup.yml) ------------------------------------------------------------------------------
+
+---
+  - name: installapacheandnode
+    hosts: testwebservers
+    tasks:
+      - name: ensure apache is installed
+        apt:
+          name: apache2
+          state: latest
+
+      - name: ensure nodejs is installed
+        apt:
+          name: nodejs
+          state: latest
+
+  - name: installmariadb
+    hosts: testdbservers
+    tasks:
+      - name: ensure mariadb is installed
+        apt:
+          name: mariadb-server
+          state: latest
+
+  - name: cloneRepoOrPullRepo
+    hosts: testwebservers
+    tasks:
+      - name: Copy the shell script to the server
+        copy:
+          src: /home/ntomlin42/ansible_playbooks/cloneorrepo.sh
+          dest: /home/ntomlin42
+          mode: '0755'  # Ensure the script is executable
+
+      - name: Execute the shell script
+        command: bash /home/ntomlin42/cloneorrepo.sh "{{serverselect}}"
+        become: true
+        become_user: ntomlin42
+
+PLAYBOOK FOR PROD ANSIBLE SERVER (prodserversetup.yml) ------------------------------------------------------------------------------
+
+---
+  - name: installapacheandnode
+    hosts: prodwebservers
+    tasks:
+      - name: ensure apache is installed
+        apt:
+          name: apache2
+          state: latest
+
+      - name: ensure nodejs is installed
+        apt:
+          name: nodejs
+          state: latest
+
+  - name: installmariadb
+    hosts: proddbservers
+    tasks:
+      - name: ensure mariadb is installed
+        apt:
+          name: mariadb-server
+          state: latest
+
+  - name: cloneRepoOrPullRepo
+    hosts: prodwebservers
+    tasks:
+      - name: Copy the shell script to the server
+        copy:
+          src: /home/ntomlin42/ansible_playbooks/cloneorrepo.sh
+          dest: /home/ntomlin42
+          mode: '0755'  # Ensure the script is executable
+
+      - name: Execute the shell script
+        command: bash /home/ntomlin42/cloneorrepo.sh "{{serverselect}}"
+        become: true
+        become_user: ntomlin42
+
+
+

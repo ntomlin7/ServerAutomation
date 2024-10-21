@@ -1,0 +1,69 @@
+CLONE OR REPO SCRIPT - cloneorrepo.sh - SAME FOR ALL ANSIBLE SERVERS!!!!!!! --------------------------------------------------------
+
+#!/usr/bin/emv bash
+
+branch=$1
+
+time_stamp=$(date '+%Y-%m-%d %H:%M:%S')
+
+
+# Check if the provided environment is valid
+case "$branch" in
+    "Dev" | "Prod" | "Test")
+        # Log the chosen environment to webrepolog.txt
+        ;;
+    *)
+        # Exit with an error message
+        echo "Error: Invalid environment. Please choose Dev, Prod, or Test." >>/home/ntomlin42/brancherror.txt
+        exit 0
+        ;;
+esac
+
+repo_url="git@github.com:ttu-bburchfield/swollenhippofinal.git"
+target_dir="/home/ntomlin42/swollenhippoweb"
+
+eval "$(ssh-agent -s)"
+ssh-add /home/ntomlin42/.ssh/gcpgithub
+
+# Check if the target directory exists
+if [ -d "$target_dir" ]; then
+    # Directory exists, pull the latest changes
+    echo "Updating existing repository..."
+    cd "$target_dir"
+    git pull origin main
+    echo "Successfully pulled repository on $time_stamp. Chosen branch: $branch" >> webrepolog.txt
+else
+    # Directory doesn't exist, create it and clone the repository
+    echo "Cloning repository for the first time..."
+    mkdir "$target_dir"
+    cd "$target_dir"
+    ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+    git clone "$repo_url" "$target_dir"
+    git checkout -b "$branch"
+    echo "Cloned successfully on $time_stamp! Chosen branch: $branch" >> webrepolog.txt
+fi
+
+echo "Update complete."
+
+
+
+SCRIPT TO RUN ANSIBLE PLAYBOOK FROM CRON ON DEV (cronplaybook.sh)------------------------------------------------------------------
+
+#!/usr/bin/env bash
+cd /home/ntomlin42/ansible_playbooks/
+ansible-playbook -e "serverselect=Dev" devserversetup.yml
+
+
+SCRIPT TO RUN ANSIBLE PLAYBOOK FROM CRON ON TEST (cronplaybook.sh)------------------------------------------------------------------
+
+#!/usr/bin/env bash
+cd /home/ntomlin42/ansible_playbooks/
+ansible-playbook -e "serverselect=Test" testserversetup.yml
+
+
+SCRIPT TO RUN ANSIBLE PLAYBOOK FROM CRON ON PROD (cronplaybook.sh)------------------------------------------------------------------
+
+#!/usr/bin/env bash
+cd /home/ntomlin42/ansible_playbooks/
+ansible-playbook -e "serverselect=Prod" prodserversetup.yml
+

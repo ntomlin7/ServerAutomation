@@ -1,0 +1,58 @@
+DEV HOST CONFIG
+
+#Grouped Dev Web hosts
+ [devwebservers]
+ 10.128.0.5
+ 10.128.0.6
+
+#Grouped Dev DB hosts
+ [devdbservers]
+ 10.128.0.6
+
+ [devwebservers:vars]
+ ansible_user=root
+ ansible_password=Mickey2023!
+
+ [devdbservers:vars]
+ ansible_user=root
+ ansible_password=Mickey2023!
+
+
+TEST HOST CONFIG
+
+#Grouped Test Web Hosts
+ [testwebservers]
+ 10.128.0.9
+ 10.128.0.10
+
+#Grouped Test DB Hosts
+ [testdbservers]
+ 10.128.0.10
+
+ [testwebservers:vars]
+ ansible_user=root
+ ansible_password=Mickey2023!
+
+ [testdbservers:vars]
+ ansible_user=root
+ ansible_password=Mickey2023!
+
+
+PROD HOST CONFIG
+
+#Grouped Prod Web Hosts
+ [prodwebservers]
+ 10.128.0.7
+ 10.128.0.8
+
+#Grouped Prod DB Hosts
+ [proddbservers]
+ 10.128.0.8
+
+ [prodwebservers:vars]
+ ansible_user=root
+ ansible_password=Mickey2023!
+
+ [proddbservers:vars]
+ ansible_user=root
+ ansible_password=Mickey2023!
